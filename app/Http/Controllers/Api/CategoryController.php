@@ -90,7 +90,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'name'=>'required|unique:categories'
+            'name'=>'required|unique:categories,name,'.$id
         ],[],[
             'name'=>'الأسم'
         ]);

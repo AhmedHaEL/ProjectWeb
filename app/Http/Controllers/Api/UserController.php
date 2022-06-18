@@ -139,7 +139,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name'=>'sometimes',
-            'email'=>'sometimes|unique:users',
+            'email'=>'sometimes|unique:users,email,'.$id,
             'password'=> 'min:8|sometimes',
             'image_user'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000'
         ],[],[
