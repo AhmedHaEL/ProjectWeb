@@ -92,19 +92,26 @@ class MovieController extends Controller
         $movie = Movie::where('name','like','%'.$name.'%')->first();
         return response()->json($movie);
     }
-    public function searchMovieDate($date)
+    public function movieMonth()
     {
-        $movie = Movie::where('show_time','like','%'.$date.'%')->first();
+        $movie = Movie::where('show_time','like','%'.date("m").'%')->
+                        where('show_time','like','%'.date("y").'%')->get();
         return response()->json($movie);
     }
+//    public function searchMovieMonth($date)
+//    {
+//
+////        $q->whereMonth('created_at', '=', date('m'));
+////        $movie = Movie::where('show_time','like','%'.$date.'%')->first();
+//        $movie = Movie::where('show_time','like','%'.date("m").'%')->
+//                        where('show_time','like','%'.date("y").'%')->get();
+//        return response()->json($movie);
+//    }
     public function searchMovieDaye()
     {
-        $mytime = Carbon::now();
-//        dd($mytime->toDateTimeString());
-//        dd(date("d"));
-//        dd(Carbon::now()->day);
-//        $movie = Movie::where('show_time','like','%'.Carbon::now()->day.'%')->first();
-        $movie = Movie::where('show_time','like','%'.date("d").'%')->first();
+        $movie = Movie::where('show_time','like','%'.date("d").'%')->
+                        where('show_time','like','%'.date("m").'%')->
+                        where('show_time','like','%'.date("y").'%')->first();
         return response()->json($movie);
     }
 
