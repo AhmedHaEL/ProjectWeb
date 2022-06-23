@@ -199,7 +199,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $search = User::find($id);
+//        dd($search);
+        if ($search) {
         User::where('id','=',$id)->delete();
-        return response()->json('تمت عملية الحذف بنجاح');
+        return response()->json(['تمت عملية الحذف بنجاح']);
+        }else{
+            return response()->json(['الحقل محذوف بالفعل']);
+        }
     }
 }

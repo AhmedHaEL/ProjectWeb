@@ -139,13 +139,19 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $user = Auth::user()->admin;
+        $search = Category::find($id);
+//        dd($search);
+        if ($search) {
+            $user = Auth::user()->admin;
 //        dd($user);
-        if ($user == 1){
-        Category::where('id','=',$id)->delete();
-        return response()->json(['نمت عملية الحذف بنجاح']);
+            if ($user == 1) {
+                Category::where('id', '=', $id)->delete();
+                return response()->json(['نمت عملية الحذف بنجاح']);
+            } else {
+                return response()->json(['ليس لديك الصلاحية للحذف']);
+            }
         }else{
-            return response()->json(['ليس لديك الصلاحية للحذف']);
+            return response()->json(['الحقل محذوف بالفعل']);
         }
     }
 }

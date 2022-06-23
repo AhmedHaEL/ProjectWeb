@@ -186,6 +186,9 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
+        $search = Movie::find($id);
+//        dd($search);
+        if ($search) {
         $user = Auth::user()->admin;
 //        dd($user);
         if ($user == 1){
@@ -193,6 +196,9 @@ class MovieController extends Controller
         return response()->json(['تمت عملية الحذف بنجاح']);
         }else{
             return response()->json(['ليس لديك الصلاحية للحذف']);
+        }
+        }else{
+            return response()->json(['الحقل محذوف بالفعل']);
         }
     }
 }
