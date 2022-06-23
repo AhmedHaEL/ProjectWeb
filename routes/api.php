@@ -27,6 +27,7 @@ Route::group(['middleware'=>'auth:api'],function (){
     Route::delete('/deleteUser/{id}',[\App\Http\Controllers\Api\UserController::class,'destroy']);
     Route::post('/newCategory',[\App\Http\Controllers\Api\CategoryController::class,'store']);
     Route::get('/allCategory',[\App\Http\Controllers\Api\CategoryController::class,'index']);
+    Route::get('/getCategoryMovie',[\App\Http\Controllers\Api\CategoryController::class,'getCategoryMovie']);
     Route::get('/showCategory/{id}',[\App\Http\Controllers\Api\CategoryController::class,'show']);
     Route::delete('/deleteCategory/{id}',[\App\Http\Controllers\Api\CategoryController::class,'destroy']);
     Route::post('/updateCategory/{id}',[\App\Http\Controllers\Api\CategoryController::class,'update']);

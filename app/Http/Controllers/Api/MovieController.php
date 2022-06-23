@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Movie;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Nette\Utils\DateTime;
 
@@ -40,6 +41,9 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
         $validator = Validator::make($request->all(),[
             'category_id'=>'required',
             'name'=>'required|unique:movies',
@@ -73,6 +77,9 @@ class MovieController extends Controller
         $movie->show_time = $request->show_time;
         $movie->save();
         return response()->json(['msg','تمت عملية الإضافة بنجاح']);
+        }else{
+            return response()->json(['ليس لديك الصلاحية للإضافة']);
+        }
     }
 
     /**
@@ -135,6 +142,9 @@ class MovieController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
         $validator = Validator::make($request->all(),[
             'category_id'=>'sometimes',
             'name'=>'sometimes|unique:movies,name,'.$id,
@@ -163,6 +173,9 @@ class MovieController extends Controller
         }
         $movie->save();
         return response()->json(['msg','تمت عملية التعديل بنجاح']);
+        }else{
+            return response()->json(['ليس لديك الصلاحية للتعديل']);
+        }
     }
 
     /**
@@ -173,7 +186,13 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
         Movie::where('id','=',$id)->delete();
         return response()->json(['تمت عملية الحذف بنجاح']);
+        }else{
+            return response()->json(['ليس لديك الصلاحية للحذف']);
+        }
     }
 }

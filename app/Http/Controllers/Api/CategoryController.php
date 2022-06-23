@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\MockObject\Api;
 
@@ -18,6 +20,12 @@ class CategoryController extends Controller
     public function index()
     {
         $category = Category::all();
+        return response()->json($category);
+    }
+
+    public function getCategoryMovie()
+    {
+        $category = Category::with('Movies')->get();
         return response()->json($category);
     }
 
@@ -39,22 +47,31 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'=>'required|unique:categories'
-        ],[],[
-            'name'=>'الأسم'
-        ]);
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
+            $validator = Validator::make($request->all(),[
+                'name'=>'required|unique:categories'
+            ],[],[
+                'name'=>'الأسم'
+            ]);
 
-        if ($validator->fails()){
-            $msg = 'تأكد من البيانات المدخلة';
-            $data = $validator->errors();
-            return response()->json(compact('msg','data'),422);
+            if ($validator->fails()){
+                $msg = 'تأكد من البيانات المدخلة';
+                $data = $validator->errors();
+                return response()->json(compact('msg','data'),422);
+            }
+
+            $category = new Category();
+            $category->name = $request->name;
+            $category->save();
+            return response()->json(['msg','تمت عملية الإضافة بنجاح']);
+
+        }else{
+            return response()->json(['ليس لديك الصلاحية للإضافة']);
         }
+//        return response()->json($user);
 
-        $category = new Category();
-        $category->name = $request->name;
-        $category->save();
-        return response()->json(['msg','تمت عملية الإضافة بنجاح']);
     }
 
     /**
@@ -89,6 +106,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
         $validator = Validator::make($request->all(),[
             'name'=>'required|unique:categories,name,'.$id
         ],[],[
@@ -105,6 +125,10 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->save();
         return response()->json(['msg','تمت عملية التعديل بنجاح']);
+        }else{
+            return response()->json(['ليس لديك الصلاحية للتعديل']);
+        }
+
     }
 
     /**
@@ -115,7 +139,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::user()->admin;
+//        dd($user);
+        if ($user == 1){
         Category::where('id','=',$id)->delete();
         return response()->json(['نمت عملية الحذف بنجاح']);
+        }else{
+            return response()->json(['ليس لديك الصلاحية للحذف']);
+        }
     }
 }

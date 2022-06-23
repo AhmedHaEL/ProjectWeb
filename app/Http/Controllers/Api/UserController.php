@@ -43,11 +43,13 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
            'email'=>'required|unique:users',
            'password'=> 'required|min:8',
-            'image_user'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000'
+           'image_user'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000',
+           'admin'=>'sometimes|numeric|min:0|max:1'
         ],[],[
             'email'=>'البريد الإلكتروني',
             'password'=>'كلمة المرور',
-            'image_user'=>'صورة المستخدم'
+            'image_user'=>'صورة المستخدم',
+            'admin'=>'نوع الحساب'
         ]);
 
         if ($validator->fails()){
@@ -68,6 +70,13 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        if ($request->admin){
+            $user->admin = $request->admin;
+        }else{
+            $user->admin = 0;
+        }
+
+
         $user->password = Hash::make($request->password);
         $user->save();
         return response()->json(['msg'=>'تمت عملية الإضافة بنجاح']);
@@ -141,12 +150,14 @@ class UserController extends Controller
             'name'=>'sometimes',
             'email'=>'sometimes|unique:users,email,'.$id,
             'password'=> 'min:8|sometimes',
-            'image_user'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000'
+            'image_user'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000',
+           'admin'=>'sometimes|numeric|min:0|max:1'
         ],[],[
             'name'=>'الأسم',
             'email'=>'البريد الإلكتروني',
             'password'=>'كلمة المرور',
-            'image_user'=>'صورة المستخدم'
+            'image_user'=>'صورة المستخدم',
+            'admin'=>'نوع الحساب'
         ]);
 
         if ($validator->fails()){
@@ -173,7 +184,9 @@ class UserController extends Controller
         if (Hash::make($request->password)){
             $user->password = Hash::make($request->password);
         }
-
+        if ($request->admin) {
+            $user->admin = $request->admin;
+        }
         $user->save();
         return response()->json(['msg'=>'تمت عملية التعديل بنجاح']);
     }
