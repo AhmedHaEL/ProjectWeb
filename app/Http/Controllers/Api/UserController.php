@@ -205,7 +205,7 @@ class UserController extends Controller
             User::where('id','=',$id)->delete();
             return response()->json(['تمت عملية الحذف بنجاح']);
         }else{
-            return response()->json(['الحقل محذوف بالفعل']);
+            return response()->json(['الحقل محذوف بالفعل أو غير موجود']);
         }
     }
 }

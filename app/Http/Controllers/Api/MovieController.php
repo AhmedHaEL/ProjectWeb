@@ -118,7 +118,7 @@ class MovieController extends Controller
     {
         $movie = Movie::where('show_time','like','%'.date("d").'%')->
                         where('show_time','like','%'.date("m").'%')->
-                        where('show_time','like','%'.date("y").'%')->first();
+                        where('show_time','like','%'.date("y").'%')->get();
         return response()->json($movie);
     }
 
