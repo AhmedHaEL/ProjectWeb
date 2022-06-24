@@ -190,17 +190,18 @@ class MovieController extends Controller
     {
         $search = Movie::find($id);
 //        dd($search);
-        if ($search) {
+       if ($search) {
         $user = Auth::user()->admin;
 //        dd($user);
         if ($user == 1){
-        Movie::where('id','=',$id)->delete();
-        return response()->json(['تمت عملية الحذف بنجاح']);
+            Movie::where('id','=',$id)->delete();
+            return response()->json(['تمت عملية الحذف بنجاح']);
         }else{
             return response()->json(['ليس لديك الصلاحية للحذف']);
         }
-        }else{
+
+       }else{
             return response()->json(['الحقل محذوف بالفعل أو غير موجود']);
-        }
+       }
     }
 }
