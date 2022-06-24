@@ -70,15 +70,16 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+
         if ($request->admin){
             $user->admin = $request->admin;
         }else{
             $user->admin = 0;
         }
 
-
         $user->password = Hash::make($request->password);
         $user->save();
+
         return response()->json(['msg'=>'تمت عملية الإضافة بنجاح']);
     }
 
@@ -200,7 +201,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         $search = User::find($id);
-//        dd($search);
         if ($search) {
             User::where('id','=',$id)->delete();
             return response()->json(['تمت عملية الحذف بنجاح']);

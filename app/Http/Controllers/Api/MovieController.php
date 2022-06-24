@@ -42,41 +42,40 @@ class MovieController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user()->admin;
-//        dd($user);
         if ($user == 1){
-        $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(),[
             'category_id'=>'required',
             'name'=>'required|unique:movies',
             'show_time'=>'required',
             'image'=>'mimes:jpeg,jpg,png,gif|sometimes|max:10000'
-        ],[],[
+            ],[],[
             'category_id'=>'نوع التصنيف',
             'name'=>'الأسم',
             'show_time'=>'وقت العرض',
             'image'=>'صورة الفيلم'
-        ]);
+            ]);
 
-        if ($validator->fails()){
+            if ($validator->fails()){
             $msg = 'تأكد من البيانات المدخلة';
             $data = $validator->errors();
             return response()->json(compact('msg','data'),422);
-        }
+            }
 
-        $movie = new Movie();
-        $movie->category_id = $request->category_id;
+            $movie = new Movie();
+            $movie->category_id = $request->category_id;
 
-        if ($request->hasFile('image')){
+            if ($request->hasFile('image')){
             $file = $request->file('image');
             $image_name = time().'.'.$file->getClientOriginalExtension();
             $path = 'images'.'/'.$image_name;
             $file->move(public_path('images'),$image_name);
             $movie->image = $path;
-        }
+            }
 
-        $movie->name = $request->name;
-        $movie->show_time = $request->show_time;
-        $movie->save();
-        return response()->json(['msg','تمت عملية الإضافة بنجاح']);
+            $movie->name = $request->name;
+            $movie->show_time = $request->show_time;
+            $movie->save();
+            return response()->json(['msg','تمت عملية الإضافة بنجاح']);
         }else{
             return response()->json(['ليس لديك الصلاحية للإضافة']);
         }
@@ -105,22 +104,9 @@ class MovieController extends Controller
                         where('show_time','like','%'.date("y").'%')->get();
         return response()->json($movie);
     }
-//    public function searchMovieMonth($date)
-//    {
-//
-////        $q->whereMonth('created_at', '=', date('m'));
-////        $movie = Movie::where('show_time','like','%'.$date.'%')->first();
-//        $movie = Movie::where('show_time','like','%'.date("m").'%')->
-//                        where('show_time','like','%'.date("y").'%')->get();
-//        return response()->json($movie);
-//    }
     public function searchMovieDaye()
     {
-//        $movie = Movie::where('show_time','like','%'.date("d").'%')->
         $movie = Movie::whereDate('show_time',Carbon::today())->get();
-//                        where('show_time','like','%'.date("m").'%')->
-//                        where('show_time','like','%'.date("y").'%')->
-
         return response()->json($movie);
     }
 
@@ -145,36 +131,38 @@ class MovieController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user()->admin;
-//        dd($user);
+
         if ($user == 1){
-        $validator = Validator::make($request->all(),[
-            'category_id'=>'sometimes',
-            'name'=>'sometimes|unique:movies,name,'.$id,
-            'show_time'=>'sometimes'
-        ],[],[
-            'category_id'=>'نوع التصنيف',
-            'name'=>'الأسم',
-            'show_time'=>'وقت العرض'
-        ]);
+            $validator = Validator::make($request->all(),[
+                 'category_id'=>'sometimes',
+                 'name'=>'sometimes|unique:movies,name,'.$id,
+                 'show_time'=>'sometimes'
+               ],[],[
+                 'category_id'=>'نوع التصنيف',
+                 'name'=>'الأسم',
+                 'show_time'=>'وقت العرض'
+            ]);
 
-        if ($validator->fails()){
-            $msg = 'تأكد من البيانات المدخلة';
-            $data = $validator->errors();
-            return response()->json(compact('msg','data'),422);
-        }
+            if ($validator->fails()){
+                $msg = 'تأكد من البيانات المدخلة';
+                $data = $validator->errors();
+                return response()->json(compact('msg','data'),422);
+            }
 
-        $movie = Movie::find($id);
-        if ($request->category_id){
-            $movie->category_id = $request->category_id;
-        }
-        if ($request->name){
-            $movie->name = $request->name;
-        }
-        if ($request->show_time){
-            $movie->show_time = $request->show_time;
-        }
-        $movie->save();
-        return response()->json(['msg','تمت عملية التعديل بنجاح']);
+            $movie = Movie::find($id);
+
+            if ($request->category_id){
+                 $movie->category_id = $request->category_id;
+            }
+            if ($request->name){
+                 $movie->name = $request->name;
+            }
+            if ($request->show_time){
+                $movie->show_time = $request->show_time;
+            }
+
+            $movie->save();
+            return response()->json(['msg','تمت عملية التعديل بنجاح']);
         }else{
             return response()->json(['ليس لديك الصلاحية للتعديل']);
         }
@@ -189,16 +177,15 @@ class MovieController extends Controller
     public function destroy($id)
     {
         $search = Movie::find($id);
-//        dd($search);
        if ($search) {
-        $user = Auth::user()->admin;
-//        dd($user);
-        if ($user == 1){
-            Movie::where('id','=',$id)->delete();
-            return response()->json(['تمت عملية الحذف بنجاح']);
-        }else{
-            return response()->json(['ليس لديك الصلاحية للحذف']);
-        }
+            $user = Auth::user()->admin;
+
+            if ($user == 1){
+                 Movie::where('id','=',$id)->delete();
+                 return response()->json(['تمت عملية الحذف بنجاح']);
+            }else{
+                 return response()->json(['ليس لديك الصلاحية للحذف']);
+            }
 
        }else{
             return response()->json(['الحقل محذوف بالفعل أو غير موجود']);

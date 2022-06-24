@@ -50,7 +50,7 @@ class User extends Authenticatable
     public function categoriesUser(){
         return $this->belongsTo(Category::class,'category_id');
     }
-
+//
 //    public function getImageUelAttribute(){
 //        return url('/').'/'.$this->image_user;
 //    }

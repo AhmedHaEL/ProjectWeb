@@ -38,7 +38,6 @@ Route::group(['middleware'=>'auth:api'],function (){
     Route::delete('/deleteMovie/{id}',[\App\Http\Controllers\Api\MovieController::class,'destroy']);
     Route::get('/searchMovieName/{name}',[\App\Http\Controllers\Api\MovieController::class,'searchMovieName']);
     Route::get('/movieMonth',[\App\Http\Controllers\Api\MovieController::class,'movieMonth']);
-//    Route::get('/searchMovieMonth/{date}',[\App\Http\Controllers\Api\MovieController::class,'searchMovieMonth']);
     Route::get('/searchMovieDaye',[\App\Http\Controllers\Api\MovieController::class,'searchMovieDaye']);
 });
 
