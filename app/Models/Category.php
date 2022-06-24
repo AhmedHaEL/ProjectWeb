@@ -12,7 +12,7 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    public function Movies(){
+    public function movies(){
         return $this->hasMany(Movie::class);
     }
 

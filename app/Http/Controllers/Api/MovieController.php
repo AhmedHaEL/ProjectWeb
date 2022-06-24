@@ -116,9 +116,11 @@ class MovieController extends Controller
 //    }
     public function searchMovieDaye()
     {
-        $movie = Movie::where('show_time','like','%'.date("d").'%')->
-                        where('show_time','like','%'.date("m").'%')->
-                        where('show_time','like','%'.date("y").'%')->get();
+//        $movie = Movie::where('show_time','like','%'.date("d").'%')->
+        $movie = Movie::whereDate('show_time',Carbon::today())->get();
+//                        where('show_time','like','%'.date("m").'%')->
+//                        where('show_time','like','%'.date("y").'%')->
+
         return response()->json($movie);
     }
 
@@ -198,7 +200,7 @@ class MovieController extends Controller
             return response()->json(['ليس لديك الصلاحية للحذف']);
         }
         }else{
-            return response()->json(['الحقل محذوف بالفعل']);
+            return response()->json(['الحقل محذوف بالفعل أو غير موجود']);
         }
     }
 }

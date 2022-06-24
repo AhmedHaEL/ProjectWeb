@@ -25,7 +25,7 @@ class CategoryController extends Controller
 
     public function getCategoryMovie()
     {
-        $category = Category::with('Movies')->get();
+        $category = Category::with('movies')->get();
         return response()->json($category);
     }
 
@@ -151,7 +151,7 @@ class CategoryController extends Controller
                 return response()->json(['ليس لديك الصلاحية للحذف']);
             }
         }else{
-            return response()->json(['الحقل محذوف بالفعل']);
+            return response()->json(['الحقل محذوف بالفعل أو غير موجود']);
         }
     }
 }

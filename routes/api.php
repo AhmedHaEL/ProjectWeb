@@ -19,11 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login',[\App\Http\Controllers\Api\UserController::class,'login']);
+Route::post('/newUser',[\App\Http\Controllers\Api\UserController::class,'store']);
 Route::group(['middleware'=>'auth:api'],function (){
     Route::get('/getUser',[\App\Http\Controllers\Api\UserController::class,'index']);
     Route::get('/showUser/{id}',[\App\Http\Controllers\Api\UserController::class,'show']);
     Route::post('/updateUser/{id}',[\App\Http\Controllers\Api\UserController::class,'update']);
-    Route::post('/newUser',[\App\Http\Controllers\Api\UserController::class,'store']);
     Route::delete('/deleteUser/{id}',[\App\Http\Controllers\Api\UserController::class,'destroy']);
     Route::post('/newCategory',[\App\Http\Controllers\Api\CategoryController::class,'store']);
     Route::get('/allCategory',[\App\Http\Controllers\Api\CategoryController::class,'index']);
